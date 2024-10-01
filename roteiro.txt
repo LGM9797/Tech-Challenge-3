@@ -1,0 +1,38 @@
+Olá a todos, eu sou o Lucas Monteiro, e o Bruno Ramos é minha dupla para esse tech challenge.
+
+(mostrando reportagens sobre veículos elétricos e como cuidar das baterias e etc)
+
+Nossa proposta é analisar dados de telemetria sobre o carregamento das baterias de Veículos elétricos, e aplicar um modelo de regressão linear para predizer predizer se os padrões de carregamento da bateria dos veículos está dentro de um padrão considerado normal, e consequentemente, prolongar a vida útil das baterias e evitar possiveis acidentes.
+
+
+(mostrar o conector funcionando e o banco)
+Os dados de telemetria, são obtidos a partir de um conector fornecido pela GeoTab (empresa que produz os equipamentos de telemetria instalado nos veículos) que extrai as informações do seu Data Warehouse e envia para onde o usuário definir, no nosso caso, um banco de dados no Postgresql.
+
+(mostrando o código)
+A partir daí, nossa aplicação faz o download de um csv da tabela de eventos de recarga, e começamos a manipular os dados, primeiro com uma limpeza: Removendo valores NaN, vazios, ajustando textos redundantes.
+Em seguida, começamos a entender as correlações que podem ser traçadas, então, pensamos em como o modelo do carro se correlaciona com o tipo de carregador utilizado (Ac ou Dc), e plotamos no gráfico a duração da recarga distribuida pelo consumo da bateria.
+
+Depois, separamos os modelos do carros em df distintos, removemos os outliers utilizando o metodo de IQR, e plotamos num gráfico para identificar possíveis padrões de outliers.
+
+Depois, separamos os Data frames para fazer um tratamento nos dados por tipo de carregamento (AC/DC)
+
+e calculamos a regressão linear nesses Data Frames.
+
+Depois, retornamos os valores das métricas, para o texto original. E aplicamos a regressão propriamente dita, ajustando os dados de acordo com o df de treinamento. E salvamos o novo arquivo no formato CSV.
+
+Esse arquivo é enviado para um bucket s3 na AWS, onde o AWS Glue realiza o ETL, e o envia para o Athena, que é por onde consumimos o arquivo csv no nosso dashboard
+
+(Mostro o dashboard)
+
+Temos o número de veículos do modelo selecionado, a média de tempo de carregamento deles, o tipo mais utilizado de carregador, e a média do hit rate da nossa regressão.
+
+Na gráfico da esquerda, os valores reais medidos pelo equipamento instalado. Na direita, temos a regressão, indicando os valores "ideias" calculados entre o consumo de bateria e o tempo de recarga. Onde cada registro é uma recarga de um dos veículos da empresa.
+
+
+
+Podemos concluir que, todos os valores que não estão de acordo com a linha da regressão, podem significar eventuais problemas no carregamento das baterias do veículos
+
+
+Com isso, nosso intuito é poder prever quais veículos apresentam um comportamento discrepante entre os outros veículos do mesmo modelo, no seu carregamento de bateria.
+
+Obrigade
